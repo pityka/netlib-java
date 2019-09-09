@@ -21,32 +21,12 @@
 
     <profiles>
       <profile>
-	<id>aarch64-profile</id>
-	<activation>
-	  <os><arch>aarch64</arch></os>
-	</activation>
-	<modules>
-          <module>linux-aarch64</module>
-	</modules>
-      </profile>
-      <profile>
-	<id>ppc64le-profile</id>
-	<activation>
-	  <os><arch>ppc64le</arch></os>
-	</activation>
-	<modules>
-          <module>linux-ppc64le</module>
-	</modules>
-      </profile>
-      <profile>
 	<id>default-profile</id>
 	<activation>
 	  <activeByDefault>true</activeByDefault>
 	</activation>
 	<modules>
-          <module>linux-x86_64</module>
-          <module>linux-i686</module>
-          <module>linux-armhf</module>
+          <module>centos7-x86_64</module>
 	</modules>
       </profile>
     </profiles>

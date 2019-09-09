@@ -84,7 +84,6 @@
     <modules>
         <module>core</module>
         <module>legacy</module>
-        <module>native_ref</module>
         <module>native_system</module>
     </modules>
 
