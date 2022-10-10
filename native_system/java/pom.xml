@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.github.fommil.netlib</groupId>
         <artifactId>native_system</artifactId>
-        <version>1.2-SNAPSHOT</version>
+        <version>99-SNAPSHOT</version>
     </parent>
 
     <artifactId>native_system-java</artifactId>
@@ -23,18 +23,11 @@
             <artifactId>core</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
     </dependencies>
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-            </plugin>
+         
             <plugin>
                 <groupId>com.github.fommil.netlib</groupId>
                 <artifactId>generator</artifactId>
@@ -49,10 +42,10 @@
                             <goal>native-java</goal>
                         </goals>
                         <configuration>
-                            <outputName>com/github/fommil/netlib/NativeSystemBLAS.java</outputName>
+                            <outputName>io/github/pityka/netlib/NativeSystemBLAS.java</outputName>
                             <scan>org.netlib.blas</scan>
-                            <implementing>com.github.fommil.netlib.BLAS</implementing>
-                            <extending>com.github.fommil.netlib.F2jBLAS</extending>
+                            <implementing>io.github.pityka.netlib.BLAS</implementing>
+                            <extending>io.github.pityka.netlib.F2jBLAS</extending>
                             <unsupported>${prefer.f2j}</unsupported>
                             <natives>${natives}</natives>
                         </configuration>
@@ -63,30 +56,29 @@
                             <goal>native-java</goal>
                         </goals>
                         <configuration>
-                            <outputName>com/github/fommil/netlib/NativeSystemLAPACK.java</outputName>
+                            <outputName>io/github/pityka/netlib/NativeSystemLAPACK.java</outputName>
                             <scan>org.netlib.lapack</scan>
-                            <implementing>com.github.fommil.netlib.LAPACK</implementing>
-                            <extending>com.github.fommil.netlib.F2jLAPACK</extending>
+                            <implementing>io.github.pityka.netlib.LAPACK</implementing>
+                            <extending>io.github.pityka.netlib.F2jLAPACK</extending>
                             <unsupported>${prefer.f2j}</unsupported>
                             <natives>${natives}</natives>
                         </configuration>
                     </execution>
-                    <execution>
-                        <id>arpack</id>
-                        <goals>
-                            <goal>native-java</goal>
-                        </goals>
-                        <configuration>
-                            <outputName>com/github/fommil/netlib/NativeSystemARPACK.java</outputName>
-                            <scan>org.netlib.arpack</scan>
-                            <implementing>com.github.fommil.netlib.ARPACK</implementing>
-                            <extending>com.github.fommil.netlib.F2jARPACK</extending>
-                            <unsupported>${prefer.f2j}</unsupported>
-                            <natives>${natives}</natives>
-                        </configuration>
-                    </execution>
+                   
                 </executions>
             </plugin>
+             <plugin>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.7.0</version>
+            <configuration>
+                <compilerArgs>
+                    <arg>-h</arg>
+                    <arg>target/headers</arg>
+                 </compilerArgs>
+                <source>11</source>
+                <target>11</target>
+            </configuration>
+        </plugin>
         </plugins>
     </build>
 </project>

@@ -84,6 +84,9 @@ public class NativeImplJniGenerator extends AbstractNetlibGenerator {
   @Parameter
   protected boolean extractChar;
 
+  @Parameter
+  protected Boolean noInclude;
+
   @Override
   protected String generate(List<Method> methods) throws Exception {
     ST t = jniTemplates.getInstanceOf("jni");
@@ -91,7 +94,11 @@ public class NativeImplJniGenerator extends AbstractNetlibGenerator {
     if (includes == null)
       includes = Lists.newArrayList();
 
-    includes.add(outputName.replace(".c", ".h"));
+      System.out.println(noInclude);
+
+    if (!noInclude) {
+      includes.add(outputName.replace(".c", ".h"));
+    }
     t.add("includes", includes);
 
     List<String> members = Lists.newArrayList();
