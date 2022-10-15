@@ -6,3 +6,14 @@
 *.ear
 *.iml
 
+target/
+
+*dylib
+*so
+
+.bloop/
+metals.sbt
+.metals/
+.vscode
+sbt/core/src/main/java/*.java
+.bsp/

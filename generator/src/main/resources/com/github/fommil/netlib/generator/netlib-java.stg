@@ -67,13 +67,13 @@ package $package$;
  * expected by the lower level routines; contrary to
  * typical Java 2D row-major arrays.</i>
  */
-@lombok.extern.java.Log
 public abstract class $name$ {
 
   private static final String FALLBACK = "$fallback$";
   private static final String IMPLS = "$impls$";
   private static final String PROPERTY_KEY = "$package$.$name$";
   private static final $name$ INSTANCE;
+  public static final java.util.ArrayList<Throwable> exceptionsDuringLoad = new java.util.ArrayList<Throwable>() ;
   static {
     try {
       String[] classNames = System.getProperty(PROPERTY_KEY, IMPLS).split(",");
@@ -83,15 +83,13 @@ public abstract class $name$ {
           impl = load(className);
           break;
         } catch (Throwable e) {
-          log.warning("Failed to load implementation from: " + className);
+          exceptionsDuringLoad.add(e);
         }
       }
       if (impl == null) {
-        log.warning("Using the fallback implementation.");
         impl = load(FALLBACK);
       }
       INSTANCE = impl;
-      log.config("Implementation provided by " + INSTANCE.getClass());
       $initCode$
     } catch (Throwable e) {
       throw new ExceptionInInitializerError(e);
@@ -100,7 +98,7 @@ public abstract class $name$ {
 
   private static $name$ load(String className) throws Exception {
     Class klass = Class.forName(className);
-    return ($name$) klass.newInstance();
+    return ($name$) klass.getDeclaredConstructor().newInstance();
   }
 
   /**
@@ -138,7 +136,20 @@ public $returns$ $method$($params(paramTypes,paramNames)$) {
 
 staticJniLoader(prop, lib) ::= <<
 static {
-  String jnilib = com.github.fommil.jni.JniNamer.getJniName("$lib$");
+  String jnilib;
+  String os = System.getProperty("os.name", "").toLowerCase();
+  String arch = System.getProperty("os.arch", "").toLowerCase();
+  if (os.startsWith("linux")) {
+      if (arch == "aarch64" || arch == "arm64") {
+        jnilib = "libnetlibjavajni.aarch64.so";
+      } else {
+        jnilib = "libnetlibjavajni.x86_64.so";
+      }
+  } else if (os.startsWith("mac os x") || os.startsWith("darwin")) {
+      jnilib = "libnetlibjavajni.dylib";
+  } else {
+    throw new RuntimeException("Operating system not supported or not recognized: "+os);
+  }
   String natives = System.getProperty("$prop$", jnilib);
   com.github.fommil.jni.JniLoader.load(natives.split(","));
 }

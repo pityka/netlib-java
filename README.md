@@ -1,3 +1,56 @@
+JNI bindings to BLAS and LAPACK. 
+
+This repository is a fork of fommil/netlib-java, which have been archived. 
+
+## Usage
+If using sbt, then add this to build.sbt, or similarly for other build tools.
+  
+    libraryDependencies += "io.github.pityka" % "netlib-java" % "?"
+
+Furthermore, on Linux it is recommended to install openblas.
+
+## Changes in this repository vs the upstream fommil/netlib-java:
+- Change of java package name to `io.github.pityka`, this is to avoid transitive dependency issues. 
+- Removal of Windows builds
+- Removal of builds on architectures except amd64, aarch64 and Apple arm64.
+- Universal binaries on Mac containing code for both amd64 and arm64 .
+- Reworked build: built with clang, build described in Makefiles, cross built using docker, packaged and published with sbt, maven is only used for code generation, code generator is not published to maven central.
+- Dropped ARPACK 
+- Dropped the reference implementation: it uses either the F2J JVM bytecode, or dynamically loads a system wide libblas and liblapack shared library.
+- Republished to maven under `io.github.pityka` organization name.
+
+## Java runtime dependencies
+Java dependencies: 
+- "com.github.fommil" % "jniloader" % "1.1",
+- "net.sourceforge.f2j" % "arpack_combined_all" % "0.1",
+
+## Native runtime dependencies
+- Linux: libblas.so.3, liblapack.so.3 . One can get these by e.g. installing openblas, which is available in most package managers.
+- Mac: it depends on the Accelerate framework, but that is already installed on each Mac. Nothing to do here.
+
+In case the native dependencies are not met and the JNI binding can not be loaded into the JVM process,
+then a fallback pure JVM implementation is used ("net.sourceforge.f2j" % "arpack_combined_all" % "0.1").
+
+## Platform support
+The JNI bindings are compiled for the below platforms. These native artifacts are packaged into jars and the appropriate one is selected and loaded during runtime.
+
+- Linux x86_64 and aarch64
+- Mac with Intel (x86_64) or M1 (arm64) processors
+
+## Credits
+
+Most of the credits are due to fommil for his pioneering work. 
+
+## License
+
+I did not change any of the license files or terms compared to upstream. 
+In particular see LICENSE.txt and generator/LICENSE.txt.
+The pom.xml files define the 3-clause BSD license for the published artifacts, which I continue to use for the artifats publised to maven central.
+
+# Below is the content of the README from the upstream repository. 
+
+The below text may be outdated or incorrect with respect to this repository.
+
 netlib-java
 ===========
 
@@ -19,7 +72,6 @@ If you're a developer looking for an easy-to-use linear algebra library on the J
 In `netlib-java`, implementations of BLAS/LAPACK/ARPACK are provided by:
 
 * delegating builds that use machine optimised system libraries (see below)
-* self-contained native builds using the reference Fortran from [netlib.org](http://www.netlib.org)
 * [F2J](http://icl.cs.utk.edu/f2j/) to ensure full portability on the JVM
 
 The [JNILoader](https://github.com/fommil/jniloader) will attempt to load the implementations in this order automatically.
@@ -259,7 +311,7 @@ Snapshots (preview releases, when new features are in active development) are di
 <dependency>
   <groupId>com.github.fommil.netlib</groupId>
   <artifactId>all</artifactId>
-  <version>1.2-SNAPSHOT</version>
+  <version>99-SNAPSHOT</version>
 </dependency>
 ```
 
